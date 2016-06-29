@@ -1,0 +1,5 @@
+<resources>
+    <string name="app_name">TranslateMe</string>
+    <string name="translate_me_hint">Translate me</string>
+    <string name="translate_button_label">Translate</string>
+</resources>
