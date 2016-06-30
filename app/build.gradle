@@ -1,4 +1,5 @@
 apply plugin: 'com.android.application'
+apply plugin: 'com.neenbedankt.android-apt'
 apply plugin: 'me.tatarka.retrolambda'
 
 android {
@@ -25,10 +26,19 @@ android {
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
-    testCompile libraries.unit_test
+    compile libraries.appcompat
+    compile libraries.android_support
+    compile libraries.android_support_design
     compile libraries.appcompat
     compile libraries.javax
     compile libraries.rxjava_android
     compile libraries.rxjava
     compile libraries.retrofit
+    compile libraries.play_services_auth
+    apt libraries.dagger_compiler
+    testApt libraries.dagger_compiler
+    provided libraries.dagger_javax
+    compile libraries.dagger
+    testCompile libraries.unit_test
+
 }

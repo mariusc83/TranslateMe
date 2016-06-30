@@ -2,4 +2,9 @@
     <string name="app_name">TranslateMe</string>
     <string name="translate_me_hint">Translate me</string>
     <string name="translate_button_label">Translate</string>
+    <string name="no_valid_account_message">You need to have a valid Google account on this device to be able to use this application.</string>
+    <string name="ok_button_label">Ok</string>
+    <string name="welcome_to_translate_me">Welcome to Translate Me</string>
+    <string name="permission_required_message">This application will need access to your accounts to be able to continue.</string>
+    <string name="select_account_to_continue_dialog_message">You need to select an Account to continue</string>
 </resources>

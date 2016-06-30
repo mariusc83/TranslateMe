@@ -1,4 +1,4 @@
-package org.mariusconstantin.translateme;
+package org.mariusconstantin.translateme.repositories;
 
 import android.support.annotation.NonNull;
 
