@@ -31,4 +31,5 @@ dependencies {
     compile libraries.rxjava_android
     compile libraries.rxjava
     compile libraries.retrofit
+    compile "com.google.android.gms:play-services-auth:9.2.0"
 }
