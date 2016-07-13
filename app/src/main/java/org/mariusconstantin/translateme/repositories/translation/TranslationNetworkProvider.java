@@ -7,7 +7,9 @@ import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLConnection;
 
@@ -16,6 +18,12 @@ import java.net.URLConnection;
  */
 public class TranslationNetworkProvider {
     public String translate(@NonNull String value) {
+
+        try {
+            final JSONObject object = fetchJSONFromUrl("https://www.googleapis.com/language/translate/v2?key=AIzaSyBr0qb1-F7Y_bHDZ-UNTmVRCpBXTQSuF9E&source=en&target=de&q=Hello%20world");
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
         return value;
     }
 
@@ -28,9 +36,10 @@ public class TranslationNetworkProvider {
     private JSONObject fetchJSONFromUrl(String urlString) throws JSONException {
         BufferedReader reader = null;
         try {
-            URLConnection urlConnection = new URL(urlString).openConnection();
-            reader = new BufferedReader(new InputStreamReader(
-                    urlConnection.getInputStream(), "iso-8859-1"));
+            HttpURLConnection urlConnection = (HttpURLConnection) new URL(urlString).openConnection();
+            final int status = urlConnection.getResponseCode();
+            final InputStream inputStream = status > 300 ? urlConnection.getErrorStream() : urlConnection.getInputStream();
+            reader = new BufferedReader(new InputStreamReader(inputStream, "iso-8859-1"));
             StringBuilder sb = new StringBuilder();
             String line;
             while ((line = reader.readLine()) != null) {

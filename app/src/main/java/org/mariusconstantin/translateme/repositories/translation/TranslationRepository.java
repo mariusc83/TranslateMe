@@ -19,9 +19,9 @@ public class TranslationRepository {
     public Observable<String> translate(@NonNull String value) {
         return Observable
                 .just(value)
-                .subscribeOn(Schedulers.io())
-                .observeOn(AndroidSchedulers.mainThread())
-                .map(inputValue -> mTranslationProvider.translate(inputValue));
+                .map(inputValue -> mTranslationProvider.translate(inputValue))
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread());
 
     }
 }
