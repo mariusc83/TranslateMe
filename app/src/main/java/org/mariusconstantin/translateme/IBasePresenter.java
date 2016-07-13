@@ -8,6 +8,4 @@ public interface IBasePresenter<D extends IBaseView> {
     void onStart();
 
     void onStop();
-
-    void isActive();
 }

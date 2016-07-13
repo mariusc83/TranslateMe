@@ -7,6 +7,7 @@ import android.text.TextUtils;
 import org.mariusconstantin.translateme.inject.AppContext;
 import org.mariusconstantin.translateme.repositories.GoogleTokenRepo;
 import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
+import org.mariusconstantin.translateme.utils.ILogger;
 
 import javax.inject.Inject;
 
@@ -19,6 +20,8 @@ import rx.Subscription;
  */
 public class LauncherPresenter implements LauncherContract.ILauncherPresenter, Observer<String> {
 
+    private static final String TAG = LauncherPresenter.class.getSimpleName();
+
     @NonNull
     private final LauncherContract.ILauncherView mView;
     @NonNull
@@ -28,30 +31,36 @@ public class LauncherPresenter implements LauncherContract.ILauncherPresenter, O
     @NonNull
     @AppContext
     private final Context mAppContext;
+    @NonNull
+    private final ILogger mLogger;
 
     private Subscription mSubscription;
     private Observable<String> mCachedObservable;
-
+    private boolean mPickAccountsRequested = false;
+    private boolean mTokenWasRequested = false;
 
     @Inject
     public LauncherPresenter(@NonNull @AppContext Context context,
                              @NonNull LauncherContract.ILauncherView launcherView,
                              @NonNull SharedPrefsRepo sharedPrefsRepo,
-                             @NonNull GoogleTokenRepo googleTokenRepo) {
+                             @NonNull GoogleTokenRepo googleTokenRepo,
+                             @NonNull ILogger logger) {
         mView = launcherView;
         mSharedPrefsRepo = sharedPrefsRepo;
         mGoogleTokenRepo = googleTokenRepo;
         mAppContext = context;
+        mLogger = logger;
     }
 
     @Override
     public void onStart() {
         if (mSubscription != null && mSubscription.isUnsubscribed() && mCachedObservable != null) {
-            mSubscription = mCachedObservable.subscribe(this);
-        } else {
-            if (mView.checkPermissions()) {
-                if (mView.checkGooglePlayServices()) checkAccountAndRequestToken();
+            if (!mTokenWasRequested) {
+                mSubscription = mCachedObservable.subscribe(this);
             }
+        } else {
+            if (mView.checkPermissions() && mView.checkGooglePlayServices())
+                checkAccountAndRequestToken();
         }
     }
 
@@ -60,11 +69,22 @@ public class LauncherPresenter implements LauncherContract.ILauncherPresenter, O
         final String account = getToUseGoogleAccount();
         if (!TextUtils.equals(SharedPrefsRepo.NO_ACCOUNT, account)) {
             requestToken(account);
-        } else {
+        } else if (!mPickAccountsRequested) {
             mView.pickAccounts();
+            mPickAccountsRequested = true;
         }
+
     }
 
+    @Override
+    public void resetPickAccountsRequested() {
+        mPickAccountsRequested = false;
+    }
+
+    @Override
+    public void resetTokenWasRequested() {
+        mTokenWasRequested = false;
+    }
 
     @Override
     public void saveAccount(@NonNull String account) {
@@ -78,20 +98,19 @@ public class LauncherPresenter implements LauncherContract.ILauncherPresenter, O
 
     @Override
     public void requestToken(@NonNull String accountName) {
-        mSubscription = mGoogleTokenRepo.getToken(accountName,
-                LauncherContract.Scopes.GOOGLE_TRANSLATE_API_SCOPE,
-                mAppContext)
-                .subscribe(this);
+        if (!mTokenWasRequested) {
+            mTokenWasRequested = true;
+            mCachedObservable = mGoogleTokenRepo.getToken(accountName,
+                    LauncherContract.Scopes.GOOGLE_TRANSLATE_API_SCOPE,
+                    mAppContext);
+            mSubscription = mCachedObservable.subscribe(this);
+        }
     }
 
     @Override
     public void onStop() {
-        if (mSubscription != null && !mSubscription.isUnsubscribed()) mSubscription.unsubscribe();
-    }
-
-    @Override
-    public void isActive() {
-
+        if (mSubscription != null && !mSubscription.isUnsubscribed())
+            mSubscription.unsubscribe();
     }
 
     @Override
@@ -101,11 +120,20 @@ public class LauncherPresenter implements LauncherContract.ILauncherPresenter, O
 
     @Override
     public void onError(Throwable e) {
-
+        mLogger.e(TAG, "Error while trying to get the Google Api Token.", e);
+        mView.handleRequestTokenError(e);
     }
 
     @Override
     public void onNext(String s) {
-
+        resetPickAccountsRequested();
+        saveToken(s);
+        mView.goToNextView(s);
     }
+
+    @Override
+    public void saveToken(@NonNull String token) {
+        // TODO: 7/6/2016 Think about persisting the token here or maybe pass it by
+    }
+
 }

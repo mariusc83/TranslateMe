@@ -22,6 +22,10 @@ public interface LauncherContract {
         boolean checkGooglePlayServices();
 
         void pickAccounts();
+
+        void handleRequestTokenError(Throwable e);
+
+        void goToNextView(@NonNull String token);
     }
 
     interface ILauncherPresenter extends IBasePresenter<ILauncherView> {
@@ -31,5 +35,11 @@ public interface LauncherContract {
         void saveAccount(@NonNull String account);
 
         void requestToken(@NonNull String accountName);
+
+        void saveToken(@NonNull String token);
+
+        void resetPickAccountsRequested();
+
+        void resetTokenWasRequested();
     }
 }

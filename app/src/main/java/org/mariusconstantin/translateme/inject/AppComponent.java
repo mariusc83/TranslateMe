@@ -4,6 +4,7 @@ import android.content.Context;
 
 import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
 import org.mariusconstantin.translateme.utils.AppUtils;
+import org.mariusconstantin.translateme.utils.ILogger;
 
 import javax.inject.Singleton;
 
@@ -22,4 +23,6 @@ public interface AppComponent {
     Context getAppContext();
 
     SharedPrefsRepo getSharedPrefsRepo();
+
+    ILogger getLogger();
 }

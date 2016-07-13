@@ -3,9 +3,13 @@ package org.mariusconstantin.translateme.inject;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
+import org.mariusconstantin.translateme.BuildConfig;
 import org.mariusconstantin.translateme.inject.AppContext;
 import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
 import org.mariusconstantin.translateme.utils.AppUtils;
+import org.mariusconstantin.translateme.utils.DebugLogger;
+import org.mariusconstantin.translateme.utils.DefaultLogger;
+import org.mariusconstantin.translateme.utils.ILogger;
 
 import javax.inject.Singleton;
 
@@ -27,10 +31,17 @@ public class MockAppModule {
     @NonNull
     private final SharedPrefsRepo mSharedPrefsRepo;
 
-    public MockAppModule(Context appContext, @NonNull AppUtils appUtils, @NonNull SharedPrefsRepo sharedPrefsRepo) {
+    @NonNull
+    private final ILogger mLogger;
+
+    public MockAppModule(@NonNull Context appContext,
+                         @NonNull AppUtils appUtils,
+                         @NonNull SharedPrefsRepo sharedPrefsRepo,
+                         @NonNull ILogger logger) {
         mAppContext = appContext;
         mAppUtils = appUtils;
         mSharedPrefsRepo = sharedPrefsRepo;
+        mLogger = logger;
     }
 
     @Singleton
@@ -50,5 +61,10 @@ public class MockAppModule {
     @Provides
     public SharedPrefsRepo provideSharedPrefsRepo(@AppContext Context appContext) {
         return mSharedPrefsRepo;
+    }
+
+    @Provides
+    public ILogger provideLogger() {
+        return mLogger;
     }
 }
