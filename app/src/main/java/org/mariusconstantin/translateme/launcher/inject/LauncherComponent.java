@@ -25,7 +25,6 @@ public interface LauncherComponent {
 
     @AppContext
     Context getAppContext();
-    
-    SharedPrefsRepo getSharedPrefsRepo();
 
+    SharedPrefsRepo getSharedPrefsRepo();
 }

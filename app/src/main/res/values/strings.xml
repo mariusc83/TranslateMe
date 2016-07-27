@@ -8,4 +8,5 @@
     <string name="permission_required_message">This application will need access to your accounts to be able to continue.</string>
     <string name="select_account_to_continue_dialog_message">You need to select an Account to continue</string>
     <string name="fatal_error_token_dialog_message">A fatal error occurred while trying to get the Google token. The application will be closed.</string>
+    <string name="error_occured_while_translating_message">An error was occurred !!</string>
 </resources>

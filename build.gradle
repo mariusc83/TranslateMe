@@ -19,9 +19,67 @@ allprojects {
     }
 }
 
+subprojects { project ->
+    repositories {
+        jcenter()
+    }
+
+    apply plugin: 'checkstyle'
+
+    checkstyle {
+        configFile = new File(rootDir, 'config/checkstyle.xml')
+        configProperties.checkStyleConfigDir = new File(rootDir, 'config')
+    }
+
+    task checkstyle(type: Checkstyle) {
+        source 'src'
+        include '**/*.java'
+        exclude '**/gen/**'
+
+        // empty classpath
+        classpath = files()
+    }
+
+    task findbugs(type: FindBugs) {
+
+        description 'Run findbugs'
+        group 'verification'
+
+        classes = fileTree('build/intermediates/classes/debug/')
+        source = fileTree('src/main/java')
+        classpath =files()
+
+        effort = 'max'
+
+        excludeFilter =  new File(rootDir, 'config/findbugs-exclude.xml')
+
+        reports {
+            xml.enabled = false
+            html.enabled = true
+        }
+    }
+
+    afterEvaluate {
+
+        if (project.tasks.findByName('check')) {
+            check.dependsOn('checkstyle','findbugs')
+        }
+    }
+
+   /* gradle.projectsEvaluated {
+        tasks.withType(JavaCompile) {
+            if (!name.contains('Test')) {
+                options.compilerArgs << '-Xlint:unchecked' << '-Xlint:deprecation'
+            }
+        }
+    }*/
+}
+
+
 task clean(type: Delete) {
     delete rootProject.buildDir
 }
+
 ext {
     libraries =
             [
@@ -37,6 +95,8 @@ ext {
                     dagger_compiler       : "com.google.dagger:dagger-compiler:${DAGGER_VERSION}",
                     dagger                : "com.google.dagger:dagger:${DAGGER_VERSION}",
                     dagger_javax          : "javax.annotation:jsr250-api:${DAGGER_JAVAX_VERSION}",
+                    guava                 : "com.google.guava:guava:${GUAVA_VERSION}",
+                    gson                  : "com.google.code.gson:gson:${GSON_VERSION}",
                     unit_test             : [
                             "junit:junit:${JUNIT_VERSION}",
                             dependencies.create("org.robolectric:robolectric:${ROBOLECTRIC_VERSION}") {

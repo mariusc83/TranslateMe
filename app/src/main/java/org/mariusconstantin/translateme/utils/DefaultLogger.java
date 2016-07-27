@@ -14,7 +14,8 @@ public class DefaultLogger implements ILogger {
     }
 
     @Override
-    public void d(@NonNull String tag, @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
+    public void d(@NonNull String tag,
+                  @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
 
     }
 
@@ -24,7 +25,8 @@ public class DefaultLogger implements ILogger {
     }
 
     @Override
-    public void w(@NonNull String tag, @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
+    public void w(@NonNull String tag,
+                  @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
 
     }
 
@@ -34,7 +36,8 @@ public class DefaultLogger implements ILogger {
     }
 
     @Override
-    public void e(@NonNull String tag, @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
+    public void e(@NonNull String tag,
+                  @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
 
     }
 }

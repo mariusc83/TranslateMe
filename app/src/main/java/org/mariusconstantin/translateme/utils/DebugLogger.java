@@ -1,6 +1,5 @@
 package org.mariusconstantin.translateme.utils;
 
-import android.os.Debug;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -17,7 +16,8 @@ public class DebugLogger implements ILogger {
     }
 
     @Override
-    public void d(@NonNull String tag, @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
+    public void d(@NonNull String tag,
+                  @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
         Log.d(tag, String.format(Locale.ENGLISH, message, params), t);
     }
 
@@ -28,7 +28,8 @@ public class DebugLogger implements ILogger {
     }
 
     @Override
-    public void w(@NonNull String tag, @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
+    public void w(@NonNull String tag,
+                  @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
         Log.w(tag, String.format(Locale.ENGLISH, message, params), t);
     }
 
@@ -38,7 +39,8 @@ public class DebugLogger implements ILogger {
     }
 
     @Override
-    public void e(@NonNull String tag, @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
+    public void e(@NonNull String tag,
+                  @NonNull Throwable t, @NonNull String message, @Nullable Object... params) {
         Log.e(tag, String.format(Locale.ENGLISH, message, params), t);
     }
 }

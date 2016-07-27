@@ -1,8 +1,6 @@
 package org.mariusconstantin.translateme.launcher;
 
-import android.content.Context;
 import android.support.annotation.NonNull;
-import android.support.annotation.Nullable;
 
 import org.mariusconstantin.translateme.IBasePresenter;
 import org.mariusconstantin.translateme.IBaseView;
@@ -11,7 +9,7 @@ import org.mariusconstantin.translateme.IBaseView;
  * Created by MConstantin on 7/4/2016.
  */
 public interface LauncherContract {
-    interface Scopes{
+    interface Scopes {
         String GOOGLE_TRANSLATE_API_SCOPE = "oauth2:https://www.googleapis.com/auth/translate";
     }
 

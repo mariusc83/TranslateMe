@@ -18,7 +18,7 @@ public class TranslateApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-        mAppComponent= DaggerAppComponent
+        mAppComponent = DaggerAppComponent
                 .builder()
                 .appModule(new AppModule(this.getApplicationContext()))
                 .build();

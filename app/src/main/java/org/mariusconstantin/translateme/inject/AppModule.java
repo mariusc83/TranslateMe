@@ -3,7 +3,6 @@ package org.mariusconstantin.translateme.inject;
 import android.content.Context;
 
 import org.mariusconstantin.translateme.BuildConfig;
-import org.mariusconstantin.translateme.inject.AppContext;
 import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
 import org.mariusconstantin.translateme.utils.AppUtils;
 import org.mariusconstantin.translateme.utils.DebugLogger;

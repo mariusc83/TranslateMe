@@ -22,12 +22,15 @@ import rx.schedulers.Schedulers;
 public class GoogleTokenRepo {
     private static final String GOOGLE_ACCOUNT_TYPE = "com.google";
 
-    public Observable<String> getToken(@NonNull String accountName, @NonNull String scope, @AppContext Context context) {
+    public Observable<String> getToken(@NonNull String accountName,
+                                       @NonNull String scope,
+                                       @AppContext Context context) {
         return Observable
                 .just(accountName)
                 .map(account -> {
                     try {
-                        return GoogleAuthUtil.getToken(context, new Account(account, GOOGLE_ACCOUNT_TYPE), scope);
+                        return GoogleAuthUtil.getToken(context,
+                                new Account(account, GOOGLE_ACCOUNT_TYPE), scope);
                     } catch (IOException | GoogleAuthException e) {
                         throw Exceptions.propagate(e);
                     }

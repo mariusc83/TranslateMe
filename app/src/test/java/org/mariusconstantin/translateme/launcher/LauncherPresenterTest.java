@@ -16,6 +16,8 @@ import org.mariusconstantin.translateme.launcher.inject.MockLauncherComponent;
 import org.mariusconstantin.translateme.launcher.inject.MockLauncherModule;
 import org.mariusconstantin.translateme.repositories.GoogleTokenRepo;
 import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
+import org.mariusconstantin.translateme.repositories.translation.TranslationNetworkProvider;
+import org.mariusconstantin.translateme.repositories.translation.TranslationRepository;
 import org.mariusconstantin.translateme.utils.AppUtils;
 import org.mariusconstantin.translateme.utils.ILogger;
 import org.mockito.InOrder;
@@ -26,15 +28,21 @@ import org.robolectric.RobolectricGradleTestRunner;
 import org.robolectric.annotation.Config;
 
 import java.util.concurrent.CountDownLatch;
+import java.util.concurrent.TimeUnit;
 
 import rx.Observable;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.inOrder;
-import static org.mockito.BDDMockito.*;
+import static org.mockito.BDDMockito.given;
+import static org.mockito.BDDMockito.eq;
+import static org.mockito.BDDMockito.verifyNoMoreInteractions;
+import static org.mockito.BDDMockito.anyString;
+import static org.mockito.BDDMockito.inOrder;
+import static org.mockito.BDDMockito.any;
+import static org.mockito.BDDMockito.never;
 
 /**
  * Created by MConstantin on 7/4/2016.
@@ -62,6 +70,12 @@ public class LauncherPresenterTest {
 
     @Mock
     ILogger mMockLogger;
+
+    @Mock
+    TranslationNetworkProvider mMockNetworkProvider;
+
+    @Mock
+    TranslationRepository mMockTranslationRepository;
 
     LauncherPresenter mLauncherPresenter;
 
@@ -120,7 +134,8 @@ public class LauncherPresenterTest {
         // given
         given(mMockView.checkPermissions()).willReturn(true);
         given(mMockView.checkGooglePlayServices()).willReturn(true);
-        given(mMockSharedPrefsRepo.getStoredSelectedGoogleAccount()).willReturn(SharedPrefsRepo.NO_ACCOUNT);
+        given(mMockSharedPrefsRepo.getStoredSelectedGoogleAccount())
+                .willReturn(SharedPrefsRepo.NO_ACCOUNT);
 
         // when
         mLauncherPresenter.onStart();
@@ -148,7 +163,9 @@ public class LauncherPresenterTest {
         given(mMockView.checkPermissions()).willReturn(true);
         given(mMockView.checkGooglePlayServices()).willReturn(true);
         given(mMockSharedPrefsRepo.getStoredSelectedGoogleAccount()).willReturn(testAccountName);
-        given(mMockGoogleTokenRepo.getToken(anyString(), anyString(), any(Context.class))).willReturn(mockObservable);
+        given(mMockGoogleTokenRepo.getToken(anyString(),
+                anyString(),
+                any(Context.class))).willReturn(mockObservable);
         // when
         mLauncherPresenter.onStart();
 
@@ -157,7 +174,8 @@ public class LauncherPresenterTest {
         inOrder.verify(mMockView).checkPermissions();
         inOrder.verify(mMockView).checkGooglePlayServices();
         inOrder.verify(mMockSharedPrefsRepo).getStoredSelectedGoogleAccount();
-        inOrder.verify(mMockGoogleTokenRepo).getToken(eq(testAccountName), eq(LauncherContract.Scopes.GOOGLE_TRANSLATE_API_SCOPE), any(Context.class));
+        inOrder.verify(mMockGoogleTokenRepo).getToken(eq(testAccountName),
+                eq(LauncherContract.Scopes.GOOGLE_TRANSLATE_API_SCOPE), any(Context.class));
         verify(mMockView).goToNextView(eq(testToken));
     }
 
@@ -181,7 +199,11 @@ public class LauncherPresenterTest {
         given(mMockView.checkPermissions()).willReturn(true);
         given(mMockView.checkGooglePlayServices()).willReturn(true);
         given(mMockSharedPrefsRepo.getStoredSelectedGoogleAccount()).willReturn(testAccountName);
-        given(mMockGoogleTokenRepo.getToken(anyString(), anyString(), any(Context.class))).willReturn(mockObservable);
+        given(mMockGoogleTokenRepo.getToken(
+                anyString(),
+                anyString(),
+                any(Context.class)))
+                .willReturn(mockObservable);
         // when
         mLauncherPresenter.onStart();
         mLauncherPresenter.onStop();
@@ -191,14 +213,15 @@ public class LauncherPresenterTest {
         inOrder.verify(mMockView).checkPermissions();
         inOrder.verify(mMockView).checkGooglePlayServices();
         inOrder.verify(mMockSharedPrefsRepo).getStoredSelectedGoogleAccount();
-        inOrder.verify(mMockGoogleTokenRepo).getToken(eq(testAccountName), eq(LauncherContract.Scopes.GOOGLE_TRANSLATE_API_SCOPE), any(Context.class));
+        inOrder.verify(mMockGoogleTokenRepo).getToken(eq(testAccountName),
+                eq(LauncherContract.Scopes.GOOGLE_TRANSLATE_API_SCOPE), any(Context.class));
         inOrder.verify(mMockView, never()).goToNextView(eq(testToken));
 
         // when
         mLauncherPresenter.onStart();
 
         try {
-            countDownLatch.await();
+            countDownLatch.await(5, TimeUnit.SECONDS);
         } catch (InterruptedException e) {
             Assert.fail(e.getMessage());
         }

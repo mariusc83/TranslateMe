@@ -25,4 +25,5 @@ public interface AppComponent {
     SharedPrefsRepo getSharedPrefsRepo();
 
     ILogger getLogger();
+
 }

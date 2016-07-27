@@ -4,7 +4,6 @@ import android.support.annotation.NonNull;
 
 import org.mariusconstantin.translateme.inject.PerActivity;
 import org.mariusconstantin.translateme.launcher.LauncherContract;
-import org.mariusconstantin.translateme.launcher.LauncherPresenter;
 import org.mariusconstantin.translateme.repositories.GoogleTokenRepo;
 
 import dagger.Module;

@@ -1,0 +1,16 @@
+package org.mariusconstantin.translateme.repositories.translation;
+
+import com.google.gson.annotations.SerializedName;
+
+/**
+ * Created by MConstantin on 7/26/2016.
+ */
+public class TranslationModel {
+
+    @SerializedName("data")
+    private TranslationDataModel mData;
+
+    public TranslationDataModel getData() {
+        return mData;
+    }
+}

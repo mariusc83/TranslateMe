@@ -2,7 +2,6 @@ package org.mariusconstantin.translateme.launcher;
 
 import android.Manifest;
 import android.accounts.AccountManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
@@ -98,7 +97,8 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.I
             if (ActivityCompat.shouldShowRequestPermissionRationale(this,
                     Manifest.permission.GET_ACCOUNTS)) {
                 Snackbar.make(getRootView(),
-                        R.string.permission_required_message, Snackbar.LENGTH_LONG).show();
+                        R.string.permission_required_message,
+                        Snackbar.LENGTH_LONG).show();
 
             }
             ActivityCompat.requestPermissions(this,
@@ -111,15 +111,20 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.I
     }
 
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+    public void onRequestPermissionsResult(int requestCode,
+                                           @NonNull String[] permissions,
+                                           @NonNull int[] grantResults) {
         switch (requestCode) {
             case MY_PERMISSIONS_REQUEST_GET_ACCOUNTS:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                if (grantResults.length > 0
+                        && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     mLauncherPresenter.checkAccountAndRequestToken();
                 } else {
                     // TODO: 6/29/2016 Show alert dialog here
                     finish();
                 }
+                break;
+            default:
                 break;
         }
     }
@@ -134,7 +139,9 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.I
                     mLauncherPresenter.saveAccount(account);
                     mLauncherPresenter.requestToken(account);
                 } else {
-                    Snackbar.make(getRootView(), R.string.select_account_to_continue_dialog_message, Snackbar.LENGTH_LONG).show();
+                    Snackbar.make(getRootView(),
+                            R.string.select_account_to_continue_dialog_message,
+                            Snackbar.LENGTH_LONG).show();
                 }
                 mLauncherPresenter.resetPickAccountsRequested();
                 break;
@@ -148,6 +155,8 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.I
 
                 }
                 break;
+            default:
+                break;
         }
     }
 
@@ -158,7 +167,8 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.I
     @Override
     public void handleRequestTokenError(Throwable e) {
         if (e.getCause() instanceof UserRecoverableAuthException) {
-            final UserRecoverableAuthException exception = (UserRecoverableAuthException) e.getCause();
+            final UserRecoverableAuthException exception =
+                    (UserRecoverableAuthException) e.getCause();
             startActivityForResult(exception.getIntent(), AUTH_CODE_REQUEST_CODE, null);
         } else {
             new AlertDialog.Builder(this)
@@ -178,7 +188,8 @@ public class LauncherActivity extends BaseActivity implements LauncherContract.I
 
     @Override
     public void goToNextView(@NonNull String token) {
-        startActivity(new Intent(this, MainActivity.class).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
+        startActivity(new Intent(this, MainActivity.class)
+                .addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK));
         finish();
     }
 

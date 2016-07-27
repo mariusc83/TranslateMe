@@ -55,7 +55,7 @@ public class LauncherPresenter implements LauncherContract.ILauncherPresenter, O
     @Override
     public void onStart() {
         if (mSubscription != null && mSubscription.isUnsubscribed() && mCachedObservable != null) {
-            if (!mTokenWasRequested) {
+            if (mTokenWasRequested) {
                 mSubscription = mCachedObservable.subscribe(this);
             }
         } else {
@@ -115,7 +115,8 @@ public class LauncherPresenter implements LauncherContract.ILauncherPresenter, O
 
     @Override
     public void onCompleted() {
-
+        mLogger.d(TAG, "Get Token completed");
+        resetPickAccountsRequested();
     }
 
     @Override

@@ -3,12 +3,8 @@ package org.mariusconstantin.translateme.inject;
 import android.content.Context;
 import android.support.annotation.NonNull;
 
-import org.mariusconstantin.translateme.BuildConfig;
-import org.mariusconstantin.translateme.inject.AppContext;
 import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
 import org.mariusconstantin.translateme.utils.AppUtils;
-import org.mariusconstantin.translateme.utils.DebugLogger;
-import org.mariusconstantin.translateme.utils.DefaultLogger;
 import org.mariusconstantin.translateme.utils.ILogger;
 
 import javax.inject.Singleton;
@@ -46,14 +42,14 @@ public class MockAppModule {
 
     @Singleton
     @Provides
-    public AppUtils provideAppUtils(){
+    public AppUtils provideAppUtils() {
         return mAppUtils;
     }
 
     @AppContext
     @Singleton
     @Provides
-    public Context provideAppContext(){
+    public Context provideAppContext() {
         return mAppContext;
     }
 
