@@ -1,5 +1,6 @@
 package org.mariusconstantin.translateme.main.translate;
 
+import android.content.ComponentCallbacks2;
 import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
@@ -17,6 +18,7 @@ import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 
 import org.mariusconstantin.translateme.R;
@@ -35,18 +37,24 @@ import static dagger.internal.Preconditions.checkNotNull;
 /**
  * Created by MConstantin on 7/26/2016.
  */
-public class TranslateFragment extends Fragment implements TranslateContract.ITranslateView {
+public class TranslateFragment extends Fragment implements TranslateContract.ITranslateView,
+        ComponentCallbacks2 {
 
     private TextView mResultsField;
     private EditText mInputField;
     private Button mLaunchTranslateButton;
     private TranslateContract.ITranslatePresenter mPresenter;
+    private Spinner mFromLanguageSpinner;
+    private Spinner mToLanguageSpinner;
+    private Bundle mSavedState;
+
     private TranslateComponent mTranslateComponent;
 
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+        getActivity().registerComponentCallbacks(this);
         mTranslateComponent = DaggerTranslateComponent
                 .builder()
                 .mainComponent(((MainActivity) (getActivity())).getMainComponent())
@@ -54,6 +62,10 @@ public class TranslateFragment extends Fragment implements TranslateContract.ITr
                 .build();
         mPresenter = mTranslateComponent.getTranslatePresenter();
         checkNotNull(mPresenter, "The presenter cannot be null");
+        final List<CountryModel> data = mPresenter.getAvailableLanguages();
+        mFromLanguageSpinner.setAdapter(new SpinnerAdapter(getActivity(), data));
+        mToLanguageSpinner.setAdapter(new SpinnerAdapter(getActivity(), data));
+        mSavedState = savedInstanceState;
     }
 
     @Nullable
@@ -70,6 +82,8 @@ public class TranslateFragment extends Fragment implements TranslateContract.ITr
         mResultsField = (TextView) view.findViewById(R.id.translated_text_field);
         mInputField = (EditText) view.findViewById(R.id.input_field);
         mLaunchTranslateButton = (Button) view.findViewById(R.id.translate_button);
+        mFromLanguageSpinner = (Spinner) view.findViewById(R.id.from_language);
+        mToLanguageSpinner = (Spinner) view.findViewById(R.id.to_language);
         mLaunchTranslateButton.setEnabled(false);
         mInputField.addTextChangedListener(new TextWatcher() {
             @Override
@@ -89,14 +103,52 @@ public class TranslateFragment extends Fragment implements TranslateContract.ITr
         });
         mLaunchTranslateButton
                 .setOnClickListener(target ->
-                        mPresenter.translate(mInputField.getText().toString()));
+                        mPresenter.translate(mInputField.getText().toString(),
+                                ((CountryModel) mFromLanguageSpinner.getSelectedItem())
+                                        .getCountryCode(),
+                                ((CountryModel) mToLanguageSpinner.getSelectedItem())
+                                        .getCountryCode()));
 
+
+    }
+
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        mPresenter.persistFromLanguageSpinnerPosition(mFromLanguageSpinner
+                .getSelectedItemPosition(), outState);
+        mPresenter.persistToLanguageSpinnerPosition(mToLanguageSpinner
+                .getSelectedItemPosition(), outState);
+        mPresenter.persistInputText(mInputField.getText().toString(), outState);
+        super.onSaveInstanceState(outState);
+    }
+
+    private void restorePreviousState(Bundle savedState) {
+        setFromLanguageSpinnerSelection(mPresenter.getFromLanguageSpinnerIndexDefault(savedState));
+        setToLanguageSpinnerSelection(mPresenter.getToLanguageSpinnerIndexDefault(savedState));
+        mInputField.setText(mPresenter.getInputTextDefault(savedState));
+    }
+
+    @Override
+    public void setFromLanguageSpinnerSelection(int selection) {
+        mFromLanguageSpinner.setSelection(selection);
+    }
+
+    @Override
+    public void setToLanguageSpinnerSelection(int selection) {
+        mToLanguageSpinner.setSelection(selection);
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        getActivity().unregisterComponentCallbacks(this);
     }
 
     @Override
     public void onResume() {
         super.onResume();
         mPresenter.onStart();
+        restorePreviousState(mSavedState);
     }
 
     @Override
@@ -129,6 +181,10 @@ public class TranslateFragment extends Fragment implements TranslateContract.ITr
         return isVisible();
     }
 
+    @Override
+    public void onTrimMemory(int level) {
+        mPresenter.trimMemory(level);
+    }
 
     public static class SpinnerAdapter extends BaseAdapter implements ThemedSpinnerAdapter {
         @NonNull
@@ -136,14 +192,13 @@ public class TranslateFragment extends Fragment implements TranslateContract.ITr
         @NonNull
         private final List<CountryModel> mData;
 
+        public SpinnerAdapter(Context context) {
+            this(context, Collections.emptyList());
+        }
+
         public SpinnerAdapter(Context context, @NonNull List<CountryModel> data) {
             mHelper = new ThemedSpinnerAdapter.Helper(context);
             mData = data;
-        }
-
-        public SpinnerAdapter(Context context) {
-            mHelper = new ThemedSpinnerAdapter.Helper(context);
-            mData = Collections.emptyList();
         }
 
         @Override
@@ -190,6 +245,12 @@ public class TranslateFragment extends Fragment implements TranslateContract.ITr
         @Override
         public Resources.Theme getDropDownViewTheme() {
             return mHelper.getDropDownViewTheme();
+        }
+
+        public void setData(@NonNull List<CountryModel> data) {
+            mData.clear();
+            mData.addAll(data);
+            notifyDataSetChanged();
         }
 
         private static class ViewHolder {

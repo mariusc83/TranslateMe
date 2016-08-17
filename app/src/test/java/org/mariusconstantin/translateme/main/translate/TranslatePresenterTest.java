@@ -18,7 +18,8 @@ import org.mariusconstantin.translateme.main.inject.MockMainModule;
 import org.mariusconstantin.translateme.main.inject.MockTranslateComponent;
 import org.mariusconstantin.translateme.main.inject.MockTranslateModule;
 import org.mariusconstantin.translateme.repositories.GoogleTokenRepo;
-import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
+import org.mariusconstantin.translateme.repositories.misc.ILocalesRepository;
+import org.mariusconstantin.translateme.repositories.misc.SharedPrefsRepo;
 import org.mariusconstantin.translateme.repositories.translation.TranslatedTextModel;
 import org.mariusconstantin.translateme.repositories.translation.TranslationDataModel;
 import org.mariusconstantin.translateme.repositories.translation.TranslationModel;
@@ -68,9 +69,6 @@ public class TranslatePresenterTest {
     Context mMockAppContext;
 
     @Mock
-    SharedPrefsRepo mMockSharedPrefsRepo;
-
-    @Mock
     GoogleTokenRepo mMockGoogleTokenRepo;
 
     @Mock
@@ -100,6 +98,14 @@ public class TranslatePresenterTest {
     @Mock
     Throwable mMockThrowable;
 
+    @Mock
+    ILocalesRepository mMockLocalesRepository;
+
+    @Mock
+    SharedPrefsRepo mMockSharedPrefsRepo;
+
+
+
     private TranslatePresenter mPresenter;
 
     @Before
@@ -127,7 +133,9 @@ public class TranslatePresenterTest {
 
         MockTranslateComponent translateComponent = DaggerMockTranslateComponent.builder()
                 .mockMainComponent(mockMainComponent)
-                .mockTranslateModule(new MockTranslateModule(mMockTranslateView))
+                .mockTranslateModule(new MockTranslateModule(mMockTranslateView,
+                        mMockLocalesRepository,
+                        mMockSharedPrefsRepo))
                 .build();
 
         mPresenter = translateComponent.getTranslatePresenter();
