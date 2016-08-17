@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <ListPreference
+        android:key="@string/preferred_language_from_key"
+        android:title="Translate from preferred">
+    </ListPreference>
+
+    <ListPreference
+        android:key="@string/preferred_language_to_key"
+        android:title="Translate to preferred">
+    </ListPreference>
+</PreferenceScreen>

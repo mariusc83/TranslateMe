@@ -15,7 +15,7 @@ import org.mariusconstantin.translateme.launcher.inject.DaggerMockLauncherCompon
 import org.mariusconstantin.translateme.launcher.inject.MockLauncherComponent;
 import org.mariusconstantin.translateme.launcher.inject.MockLauncherModule;
 import org.mariusconstantin.translateme.repositories.GoogleTokenRepo;
-import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
+import org.mariusconstantin.translateme.repositories.misc.SharedPrefsRepo;
 import org.mariusconstantin.translateme.repositories.translation.TranslationNetworkProvider;
 import org.mariusconstantin.translateme.repositories.translation.TranslationRepository;
 import org.mariusconstantin.translateme.utils.AppUtils;

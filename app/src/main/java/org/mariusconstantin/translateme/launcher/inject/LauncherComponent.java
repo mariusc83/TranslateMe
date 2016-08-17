@@ -6,7 +6,7 @@ import org.mariusconstantin.translateme.inject.AppComponent;
 import org.mariusconstantin.translateme.inject.AppContext;
 import org.mariusconstantin.translateme.inject.PerActivity;
 import org.mariusconstantin.translateme.launcher.LauncherPresenter;
-import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
+import org.mariusconstantin.translateme.repositories.misc.SharedPrefsRepo;
 import org.mariusconstantin.translateme.utils.AppUtils;
 
 import dagger.Component;

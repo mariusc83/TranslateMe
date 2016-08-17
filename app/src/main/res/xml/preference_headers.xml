@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<preference-headers xmlns:android="http://schemas.android.com/apk/res/android">
+    <header
+        android:fragment="org.mariusconstantin.translateme.settings.SettingsFragment"
+        android:title="@string/translation_defaults_prefs_header_title"/>
+
+</preference-headers>

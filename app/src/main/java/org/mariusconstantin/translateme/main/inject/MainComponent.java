@@ -2,6 +2,7 @@ package org.mariusconstantin.translateme.main.inject;
 
 import org.mariusconstantin.translateme.inject.AppComponent;
 import org.mariusconstantin.translateme.inject.PerActivity;
+import org.mariusconstantin.translateme.repositories.misc.SharedPrefsRepo;
 import org.mariusconstantin.translateme.repositories.translation.TranslationRepository;
 import org.mariusconstantin.translateme.utils.ILogger;
 
@@ -17,4 +18,6 @@ public interface MainComponent {
     TranslationRepository getTranslationRepository();
 
     ILogger getLogger();
+
+    SharedPrefsRepo getSharedPrefsRepo();
 }

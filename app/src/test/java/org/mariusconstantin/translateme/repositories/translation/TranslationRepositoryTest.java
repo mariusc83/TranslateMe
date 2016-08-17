@@ -31,6 +31,9 @@ import static org.mockito.BDDMockito.times;
 @Config(constants = BuildConfig.class)
 public class TranslationRepositoryTest {
 
+    private static final String FROM_LANG = "en";
+    private static final String TO_LANG = "fr";
+
     @Mock
     TranslationNetworkProvider mMockNetworkProvider;
 
@@ -51,7 +54,7 @@ public class TranslationRepositoryTest {
     public void when_an_exception_was_thrown() throws Exception {
         // given
         final JsonSyntaxException exception = new JsonSyntaxException("test");
-        given(mMockNetworkProvider.translate("test"))
+        given(mMockNetworkProvider.translate("test", FROM_LANG, TO_LANG))
                 .willThrow(exception);
 
         // when
@@ -70,7 +73,7 @@ public class TranslationRepositoryTest {
     @SuppressWarnings("unchecked")
     public void when_successful_translation() throws Exception {
         // given
-        given(mMockNetworkProvider.translate("test"))
+        given(mMockNetworkProvider.translate("test", FROM_LANG, TO_LANG))
                 .willReturn(mMockTranslationModel);
 
         // when
@@ -88,7 +91,7 @@ public class TranslationRepositoryTest {
     @SuppressWarnings("unchecked")
     public void when_subscribing_again_to_same_observable() throws Exception {
         // given
-        given(mMockNetworkProvider.translate("test"))
+        given(mMockNetworkProvider.translate("test", FROM_LANG, TO_LANG))
                 .willReturn(mMockTranslationModel);
 
         // when

@@ -2,7 +2,7 @@ package org.mariusconstantin.translateme.inject;
 
 import android.content.Context;
 
-import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
+import org.mariusconstantin.translateme.repositories.misc.SharedPrefsRepo;
 import org.mariusconstantin.translateme.utils.AppUtils;
 import org.mariusconstantin.translateme.utils.ILogger;
 

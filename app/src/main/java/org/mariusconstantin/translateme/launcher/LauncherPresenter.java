@@ -6,7 +6,7 @@ import android.text.TextUtils;
 
 import org.mariusconstantin.translateme.inject.AppContext;
 import org.mariusconstantin.translateme.repositories.GoogleTokenRepo;
-import org.mariusconstantin.translateme.repositories.SharedPrefsRepo;
+import org.mariusconstantin.translateme.repositories.misc.SharedPrefsRepo;
 import org.mariusconstantin.translateme.utils.ILogger;
 
 import javax.inject.Inject;

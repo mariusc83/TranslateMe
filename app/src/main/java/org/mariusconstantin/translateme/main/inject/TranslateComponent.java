@@ -2,6 +2,8 @@ package org.mariusconstantin.translateme.main.inject;
 
 import org.mariusconstantin.translateme.inject.PerFragment;
 import org.mariusconstantin.translateme.main.translate.TranslatePresenter;
+import org.mariusconstantin.translateme.main.translate.data.PersistedViewData;
+import org.mariusconstantin.translateme.repositories.misc.ILocalesRepository;
 
 import dagger.Component;
 
@@ -12,6 +14,10 @@ import dagger.Component;
 @PerFragment
 public interface TranslateComponent {
 
+    @PerFragment
     TranslatePresenter getTranslatePresenter();
 
+    ILocalesRepository getLocalesRepository();
+
+    PersistedViewData getPersistedViewData();
 }

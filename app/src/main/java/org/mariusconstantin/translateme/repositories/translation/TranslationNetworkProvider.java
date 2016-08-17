@@ -21,8 +21,6 @@ import java.util.Locale;
 public class TranslationNetworkProvider {
     private final Gson mGsonParser;
     private static final String API_KEY = "AIzaSyBr0qb1-F7Y_bHDZ-UNTmVRCpBXTQSuF9E";
-    private static final String DEFAULT_SOURCE_LANGUAGE = "en";
-    private static final String DEFAULT_TARGET_LANGUAGE = "fr";
     private static final String API_URL =
             "https://www.googleapis.com/language/translate/v2?key=%s&source=%s&target=%s&q=%s";
 
@@ -36,12 +34,14 @@ public class TranslationNetworkProvider {
      * @throws JsonSyntaxException
      */
     @Nullable
-    public TranslationModel translate(@NonNull String value) throws JsonSyntaxException {
+    public TranslationModel translate(@NonNull String value,
+                                      @NonNull String fromLang,
+                                      @NonNull String toLang) throws JsonSyntaxException {
         final String data = fetchJSONFromUrl(String.format(Locale.ENGLISH,
                 API_URL,
                 API_KEY,
-                DEFAULT_SOURCE_LANGUAGE,
-                DEFAULT_TARGET_LANGUAGE,
+                fromLang,
+                toLang,
                 value));
         return mGsonParser.fromJson(data, TranslationModel.class);
     }
