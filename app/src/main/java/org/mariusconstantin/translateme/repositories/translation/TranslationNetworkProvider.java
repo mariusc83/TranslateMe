@@ -7,6 +7,8 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.JsonSyntaxException;
 
+import org.mariusconstantin.translateme.BuildConfig;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
@@ -20,7 +22,7 @@ import java.util.Locale;
  */
 public class TranslationNetworkProvider {
     private final Gson mGsonParser;
-    private static final String API_KEY = "AIzaSyBr0qb1-F7Y_bHDZ-UNTmVRCpBXTQSuF9E";
+    private static final String API_KEY = BuildConfig.MY_TRANSLATE_API_KEY;
     private static final String API_URL =
             "https://www.googleapis.com/language/translate/v2?key=%s&source=%s&target=%s&q=%s";
 
