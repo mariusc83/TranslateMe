@@ -23,8 +23,13 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+
+        buildTypes.each{
+            it.buildConfigField('String','MY_TRANSLATE_API_KEY',myTranslateApiKey)
+        }
     }
 }
+
 
 dependencies {
     compile fileTree(dir: 'libs', include: ['*.jar'])
