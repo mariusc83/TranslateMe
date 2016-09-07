@@ -15,7 +15,6 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.Locale;
 
 /**
  * Created by MConstantin on 7/11/2016.
@@ -40,13 +39,16 @@ public class TranslationNetworkProvider {
                                       @NonNull String fromLang,
                                       @NonNull String toLang) throws JsonSyntaxException {
         // new change
-        final String data = fetchJSONFromUrl(String.format(Locale.ENGLISH,
+        /*final String data = fetchJSONFromUrl(String.format(Locale.ENGLISH,
                 API_URL,
                 API_KEY,
                 fromLang,
                 toLang,
-                value));
-        return mGsonParser.fromJson(data, TranslationModel.class);
+                value));*/
+        final String from = "{ \"data\": {  \"translations\": [   {    \"translatedText\": \"Hallo "
+                + "Welt\"   }  ] }}";
+        return new TranslationModel(mGsonParser.fromJson(from, TranslationDataModel.class));
+        //return mGsonParser.fromJson(data, TranslationModel.class);
     }
 
     /**

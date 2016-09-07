@@ -36,12 +36,11 @@ dependencies {
     compile libraries.appcompat
     compile libraries.android_support
     compile libraries.android_support_design
-    compile libraries.appcompat
+    provided libraries.guava
     compile libraries.javax
     compile libraries.rxjava_android
     compile libraries.rxjava
     compile libraries.streams
-/*    compile libraries.retrofit*/
     compile libraries.play_services_auth
     compile libraries.gson
     apt libraries.dagger_compiler

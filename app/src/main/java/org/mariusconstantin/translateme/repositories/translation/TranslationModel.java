@@ -10,6 +10,10 @@ public class TranslationModel {
     @SerializedName("data")
     private TranslationDataModel mData;
 
+    public TranslationModel(TranslationDataModel data) {
+        mData = data;
+    }
+
     public TranslationDataModel getData() {
         return mData;
     }
